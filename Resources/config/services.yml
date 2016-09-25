@@ -1,0 +1,9 @@
+services:
+#    service_name:
+#        class: AppBundle\Directory\ClassName
+#        arguments: ["@another_service_name", "plain_value", "%parameter_name%"]
+
+    beeflow.crypt_bundle.crypt_listener:
+        class: Beeflow\BeeflowCryptBundle\EventListener\BeeflowCryptListener
+        tags:
+            - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }

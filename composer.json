@@ -1,0 +1,26 @@
+{
+    "name": "beeflow/beeflowcryptbundle",
+    "type": "symfony-bundle",
+    "vesion": "1.0.0",
+    "description": "Symfony BeeflowCryptBundle",
+    "keywords": ["crypt", "beeflow"],
+    "homepage": "https://github.com/beeflow/beeflowcryptbundle",
+    "license": "GPL",
+    "authors": [
+        {
+            "name": "Rafal Przetakowski",
+            "email": "rafal.p@beeflow.co.uk"
+        }
+    ],
+    "support": {
+		"issues": "https://github.com/beeflow/beeflowcryptbundle/issues",
+		"source": "https://github.com/beeflow/beeflowcryptbundle/"
+	},
+    "require": {
+        "php": ">=5.6.0",
+        "symfony/framework-bundle": ">=2.3"
+    },
+    "autoload": {
+        "psr-4": { "Beeflow\\BeeflowCryptBundle\\": "" }
+    }
+}
