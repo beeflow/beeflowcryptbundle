@@ -19,7 +19,14 @@ and then
 
     $ composer update && php app/console doctrine:schema:update --force
 
-
+and finally add to `app/AppKernel.php` file:
+    
+    public function registerBundles()
+    {
+        ...
+        new Beeflow\BeeflowCryptBundle\BeeflowCryptBundle(),
+    }
+    
 ### New API client ###
 
     $ php app/console beeflow:crypt:client:create "API Key" "Client name" "encryption method (ex. AES256)" /some/path/to/your/cert
