@@ -13,23 +13,21 @@ namespace Beeflow\BeeflowCryptBundle\Lib\Interfaces;
  *
  * @package AppBundle\Lib\BFCrypt\Interfaces
  */
-interface Engine
+interface EngineInterface
 {
     /**
      * @param string $message
-     * @param string $key
      *
      * @return string
      * @throws \Exception
      */
-    public function encrypt($message, $key);
+    public function encrypt($message) ;
 
     /**
      * @param string $message
-     * @param string $key
      *
      * @return string
      * @throws \Exception
      */
-    public function decrypt($message, $key);
+    public function decrypt($message) ;
 }

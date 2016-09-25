@@ -4,7 +4,7 @@
     "vesion": "1.0.0",
     "description": "Symfony BeeflowCryptBundle",
     "keywords": ["crypt", "beeflow"],
-    "homepage": "https://github.com/beeflow/beeflowcryptbundle",
+    "homepage": "https://beeflow@bitbucket.org/beeflowteam/beeflowcryptbundle.git",
     "license": "GPL",
     "authors": [
         {
@@ -13,8 +13,8 @@
         }
     ],
     "support": {
-		"issues": "https://github.com/beeflow/beeflowcryptbundle/issues",
-		"source": "https://github.com/beeflow/beeflowcryptbundle/"
+		"issues": "https://bitbucket.org/beeflowteam/beeflowcryptbundle/issues",
+		"source": "https://beeflow@bitbucket.org/beeflowteam/beeflowcryptbundle.git"
 	},
     "require": {
         "php": ">=5.6.0",

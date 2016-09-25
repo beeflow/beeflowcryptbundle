@@ -2,9 +2,12 @@
 
 namespace Beeflow\BeeflowCryptBundle\EventListener;
 
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Beeflow\BeeflowCryptBundle\Lib\BFCrypt;
+use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
+use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 
 /**
  * Description of BeeflowCryptListener
@@ -15,11 +18,31 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class BeeflowCryptListener implements EventSubscriberInterface
 {
 
-    public function __construct()
-    {
+    /**
+     * @var
+     */
+    protected $doctrine;
 
+    /**
+     * @var string
+     */
+    protected $apiKey = null;
+
+    protected $BFCrypt;
+
+    /**
+     * BeeflowCryptListener constructor.
+     *
+     * @param $doctrine
+     */
+    public function __construct($doctrine)
+    {
+        $this->doctrine = $doctrine;
     }
 
+    /**
+     * @param FilterControllerEvent $event
+     */
     public function onKernelController(FilterControllerEvent $event)
     {
         $controller = $event->getController();
@@ -32,7 +55,57 @@ class BeeflowCryptListener implements EventSubscriberInterface
         if (!is_array($controller)) {
             return;
         }
-        dump( $event->getRequest()->query->get());
+
+        $jsonContent = $event->getRequest()->getContent();
+        $content = json_decode($jsonContent, true);
+
+        if (empty($content) || !is_array($content)) {
+            return;
+        }
+
+        if (!isset($content['api_key']) || !isset($content['crypted_request'])) {
+            return;
+        }
+
+        $this->apiKey = $content['api_key'];
+        try {
+            $this->BFCrypt = new BFCrypt($this->apiKey, $this->doctrine);
+            $message = $this->BFCrypt->decrypt($content['crypted_request']);
+        } catch (\Exception $ex) {
+            return;
+        }
+
+        if (!is_array($message)) {
+            $event->getRequest()->attributes->set('message', $message);
+        } else {
+            foreach ($message as $key => $value) {
+                $event->getRequest()->attributes->set($key, $value);
+            }
+        }
+
+    }
+
+    /**
+     * @param FilterResponseEvent $event
+     */
+    public function onKernelResponse(FilterResponseEvent $event)
+    {
+        $response = $event->getResponse();
+
+        if (empty($this->apiKey) || !($this->BFCrypt instanceof BFCrypt)) {
+            return;
+        }
+
+        $content = $response->getContent();
+        try {
+            $resp = [
+                'encrypted_response' => $this->BFCrypt->encrypt($content)
+            ];
+            $response->setContent(json_encode($resp));
+        } catch (\Exception $ex) {
+            return;
+        }
+
     }
 
     public static function getSubscribedEvents()

@@ -1,0 +1,24 @@
+Beeflow\BeeflowCryptBundle\Entity\ApiKeys:
+    type: entity
+    table: api_keys
+    id:
+        id:
+            type: string
+            length: 100
+            generator: { strategy: NONE }
+    fields:
+        client:
+          type: string
+          length: 250
+          nullable: true
+          unique: true
+        cert_file:
+            type: string
+            length: 20
+            nullable: true
+            unique: true
+        crypt_type:
+            type: string
+            length: 15
+            nullable: true
+            unique: true

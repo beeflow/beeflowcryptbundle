@@ -9,60 +9,60 @@
 namespace Beeflow\BeeflowCryptBundle\Lib;
 
 
-use Beeflow\BeeflowCryptBundle\Lib\Interfaces\Engine;
+use Beeflow\BeeflowCryptBundle\Entity\ApiKeys;
+use Beeflow\BeeflowCryptBundle\Lib\Interfaces\EngineInterface;
 
 class BFCrypt
 {
     /**
-     * @var Engine
+     * @var EngineInterface
      */
     private $engine;
 
-
-    /**
-     * BFCrypt constructor.
-     *
-     * @param string $encryptionType
-     *
-     * @throws \Exception
-     */
-    public function __construct($encryptionType)
+    public function __construct($apiKey, $doctrine)
     {
+        $apiKeyEntity = $doctrine->getRepository('AppBundle:ApiKeys')->find($apiKey);
+        if (!($apiKeyEntity instanceof ApiKeys)) {
+            throw new \Exception('There is no such ApiKey as ' . $apiKey);
+        }
+
+        $encryptionType = $apiKeyEntity->getCryptType();
         $engineClass = '\AppBundle\Lib\BFCrypt\Engines\\' . $encryptionType;
 
         try {
             $this->engine = new $engineClass();
-            if (!($this->engine instanceof Engine)) {
-                throw new \Exception('-- There is no such engine as ' . $encryptionType);
+            if (!($this->engine instanceof EngineInterface)) {
+                throw new \Exception('There is no such engine as ' . $encryptionType);
             }
         } catch (\Exception $ex) {
-            throw new \Exception('There is no such engine as ' . $encryptionType);
+            throw $ex;
         }
+
+        $certFile = $apiKeyEntity->getCertFile();
+        $this->engine->setCertFile($certFile)->prepareCerts();
     }
 
 
     /**
      * @param string $message
-     * @param string $key
      *
      * @return string
      * @throws \Exception
      */
-    public function encrypt($message, $key)
+    public function encrypt($message)
     {
-        return $this->engine->encrypt($message, $key);
+        return $this->engine->encrypt($message);
     }
 
     /**
      * @param string $message
-     * @param string $key
      *
      * @return string
      * @throws \Exception
      */
-    public function decrypt($message, $key)
+    public function decrypt($message)
     {
-        return $this->engine->decrypt($message, $key);
+        return $this->engine->decrypt($message);
     }
 
 }
