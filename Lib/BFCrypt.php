@@ -21,13 +21,13 @@ class BFCrypt
 
     public function __construct($apiKey, $doctrine)
     {
-        $apiKeyEntity = $doctrine->getRepository('AppBundle:ApiKeys')->find($apiKey);
+        $apiKeyEntity = $doctrine->getRepository('BeeflowCryptBundle:ApiKeys')->find($apiKey);
         if (!($apiKeyEntity instanceof ApiKeys)) {
             throw new \Exception('There is no such ApiKey as ' . $apiKey);
         }
 
         $encryptionType = $apiKeyEntity->getCryptType();
-        $engineClass = '\AppBundle\Lib\BFCrypt\Engines\\' . $encryptionType;
+        $engineClass = '\Beeflow\BeeflowCryptBundle\Lib\Engines\\' . $encryptionType;
 
         try {
             $this->engine = new $engineClass();
