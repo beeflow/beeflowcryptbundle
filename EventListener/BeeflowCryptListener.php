@@ -63,15 +63,24 @@ class BeeflowCryptListener implements EventSubscriberInterface
             return;
         }
 
-        if (!isset($content['api_key']) || !isset($content['crypted_request'])) {
+        if (!isset($content['api_key'])) {
             return;
         }
 
         $this->apiKey = $content['api_key'];
         try {
             $this->BFCrypt = new BFCrypt($this->apiKey, $this->doctrine);
-            $message = $this->BFCrypt->decrypt($content['crypted_request']);
         } catch (\Exception $ex) {
+            return;
+        }
+
+        if (!isset($content['crypted_request'])) {
+            return;
+        }
+
+        try {
+            $message = $this->BFCrypt->decrypt($content['crypted_request']);
+        } catch(\Exception $ex) {
             return;
         }
 
