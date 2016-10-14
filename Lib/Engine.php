@@ -27,5 +27,19 @@ abstract class Engine implements EngineInterface
         return $this;
     }
 
+    /**
+     * @param string $cert in base64
+     * @param string $fileName
+     *
+     * @return $this
+     */
+    public function installCertFile($cert, $fileName)
+    {
+        file_put_contents($this->certDir . $fileName, base64_decode($cert));
+        $this->setCertFile($fileName)->prepareCerts();
+
+        return $this;
+    }
+
     abstract public function prepareCerts();
 }
