@@ -41,5 +41,19 @@ abstract class Engine implements EngineInterface
         return $this;
     }
 
+    /**
+     * Remove Cert file
+     *
+     * @param $fileName
+     *
+     * @return $this
+     */
+    public function deleteCertFile($fileName)
+    {
+        @unlink($this->certDir . $fileName);
+
+        return $this;
+    }
+
     abstract public function prepareCerts();
 }

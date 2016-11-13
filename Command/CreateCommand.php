@@ -8,7 +8,7 @@
 
 namespace Beeflow\BeeflowCryptBundle\Command;
 
-
+use Beeflow\BeeflowCryptBundle\Entity\ApiKeys;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -74,7 +74,7 @@ class CreateCommand extends ContainerAwareCommand
 
         $em = $this->getContainer()->get('doctrine')->getManager();
         $em->persist($api);
-        $em->flush($api);
+        $em->flush();
 
         $output->writeln("Client ApiKey: " . $apiKey);
     }
