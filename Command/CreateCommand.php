@@ -54,7 +54,7 @@ class CreateCommand extends ContainerAwareCommand
         }
 
         $filename = \uniqid();
-        $apiKey = \uniqid() . '_' . \uniqid() . '_' . \uniqid();
+        $apiKey = \uniqid() . \uniqid() . \uniqid();
 
         $methodName = '\Beeflow\BeeflowCryptBundle\Lib\Engines\\' . $method;
         try {
@@ -76,7 +76,7 @@ class CreateCommand extends ContainerAwareCommand
         $em->persist($api);
         $em->flush($api);
 
-        $output->writeln($apiKey);
+        $output->writeln("Client ApiKey: " . $apiKey);
     }
 
 }
