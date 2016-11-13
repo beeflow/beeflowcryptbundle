@@ -36,7 +36,7 @@ class DeleteCommand extends ContainerAwareCommand
 
         $client = $input->getOption('key');
 
-        $api = $this->getContainer()->get('doctrine')->getRepository('BeeflowCryptBundle:ApiKeye')->find($client);
+        $api = $this->getContainer()->get('doctrine')->getRepository('BeeflowCryptBundle:ApiKey')->find($client);
         if (!($api instanceof ApiKeys)) {
             $this->logger->error('There is no client fo this ApiKey');
             exit(-1);
