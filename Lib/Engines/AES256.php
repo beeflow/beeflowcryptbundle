@@ -8,13 +8,11 @@
 
 namespace Beeflow\BeeflowCryptBundle\Lib\Engines;
 
-
 use Beeflow\BeeflowCryptBundle\Lib\Engine;
 use Beeflow\BeeflowCryptBundle\Lib\Interfaces\EngineInterface;
 
-class AES256 extends Engine  implements EngineInterface
+class AES256 extends Engine implements EngineInterface
 {
-
     const METHOD = 'aes-256-cbc';
 
     private $cert;
