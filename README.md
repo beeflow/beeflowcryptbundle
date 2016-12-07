@@ -7,7 +7,7 @@ To install bundle add to your composer.json file:
     "repositories": [
         {
             "type": "vcs",
-            "url":  "https://beeflow@bitbucket.org/beeflowteam/beeflowcryptbundle.git"
+            "url":  "https://github.com/beeflow/beeflowcryptbundle.git"
         }
     ],
     "require": {
