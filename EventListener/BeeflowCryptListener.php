@@ -56,22 +56,21 @@ class BeeflowCryptListener implements EventSubscriberInterface
             return;
         }
 
-        $jsonContent = $event->getRequest()->getContent();
-        $content = json_decode($jsonContent, true);
+        $this->apiKey = $event->getRequest()->cookies->get('api_key');
 
-        if (empty($content) || !is_array($content)) {
-            return;
-        }
+        if (empty($this->apiKey)) {
+            $jsonContent = $event->getRequest()->getContent();
+            $content = json_decode($jsonContent, true);
 
-        if (!isset($content['api_key'])) {
-            return;
-        }
+            if (empty($content) || !is_array($content)) {
+                return;
+            }
 
-        $this->apiKey = $content['api_key'];
-        try {
-            $this->BFCrypt = new BFCrypt($this->apiKey, $this->doctrine);
-        } catch (\Exception $ex) {
-            return;
+            if (!isset($content['api_key'])) {
+                return;
+            }
+
+            $this->apiKey = $content['api_key'];
         }
 
         if (!isset($content['crypted_request'])) {
@@ -79,8 +78,14 @@ class BeeflowCryptListener implements EventSubscriberInterface
         }
 
         try {
+            $this->BFCrypt = new BFCrypt($this->apiKey, $this->doctrine);
+        } catch (\Exception $ex) {
+            return;
+        }
+
+        try {
             $message = $this->BFCrypt->decrypt($content['crypted_request']);
-        } catch(\Exception $ex) {
+        } catch (\Exception $ex) {
             return;
         }
 
